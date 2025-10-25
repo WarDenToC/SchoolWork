@@ -1,0 +1,16 @@
+Joshua
+Graham
+Bounty Hunter
+
+
+
+//READ ME HERE
+to configure the config file you should use the example above 
+player 1 name
+player 2 name
+type of gun
+
+gun type: 
+    - Bounty Hunter 
+    - GP100 
+    - Colt Python
