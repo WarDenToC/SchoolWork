@@ -12,18 +12,19 @@ public class StatTracker
     ArrayList<Player> players;
     Scanner scanner = new Scanner(System.in);
     LogReader reader = new LogReader();
+    private DataBaseConn db;
     
-    public StatTracker(Logger log, ArrayList<Player> players)
+    public StatTracker(Logger log, ArrayList<Player> players, DataBaseConn db)
     {
         this.statLogger = log;
         this.players = players;
+        this.db = db;
     }
     
     public void setupStats() // This sets up the: key would be the names, the value would be the amount of turns survived and shooting self. Using hashmap 
     {
         selfShot.put(players.get(0).getName(), 0);
         selfShot.put(players.get(1).getName(), 0);
-        
         turnsSurvived.put(players.get(0).getName(), 0);
         turnsSurvived.put(players.get(1).getName(), 0);
     }
@@ -54,6 +55,33 @@ public class StatTracker
     }
     
     
+    public void initDB() //Writes the data to the database with the results and other stuff, 3 other classes will be made to read the result instead from the DB since it seperates logic
+    {
+        LocalDateTime currentDate = LocalDateTime.now();
+        String name1 = players.get(0).getName();
+        String name2 = players.get(1).getName();
+        
+        
+        //Logging to Historical Table  
+        History_DB_Reader HDB = new HDB(db, players.get(0), players.get(1), turnsSurvived, selfShot);
+        
+        //db.logHistory(name1, currentDate, selfShot.get(players.get(0)), turnsSurvived.get(players.get(0)), P1_status);
+        //db.logHistory(name1, currentDate, selfShot.get(players.get(1)), turnsSurvived.get(players.get(1)), P2_status);
+        
+        //Logging to RecentGame
+        RecentGame_DB_RW RGDB = new RecentGame_DB_RW(db, players.get(0), players.get(1));
+        RGDB.storeRecentGameDB();
+        //db.logRecentGame(players.get(0).getName(), currentDate, players.get(0).getAlive());
+        //db.logRecentGame(players.get(1).getName(), currentDate, players.get(1).getAlive());
+        
+        //Loggin to memorial
+        Player_DB_RW PDB = new Player_DB_RW(db, name1, name2);
+        PDB.storePlayersDB();
+        //db.addNewPlayers(players.get(0).getName());
+        //db.addNewPlayers(players.get(1).getName());
+    }
+    
+    
     public void PrintStats() 
     {
         LocalDateTime currentDate = LocalDateTime.now();
@@ -61,7 +89,8 @@ public class StatTracker
         String date = currentDate.format(formattedDate);
         
         StringBuilder sb = new StringBuilder(); // for this I was using println to print it, but then I had to re-code this for both printing and logging so I asked chat to rewrite this, manual work
-                
+
+        
         sb.append("\n=======Endgame=======\n");
         sb.append("Date: ").append(date).append("\n");
         sb.append("=======Players=======\n");
@@ -85,6 +114,7 @@ public class StatTracker
         sb.append("Amount of time each player survives a turn:\n").append(turnsSurvived).append("\n");
         sb.append("Gun chosen: ").append(gun.gunModel).append("\n");
 
+        
     
         System.out.println(sb.toString()); // print the string builder
 
@@ -166,8 +196,7 @@ public class StatTracker
         else
         {
             reader.readParticipatedPlayer(players, false);   
-        }
-        
+        }       
     }
     
 }
