@@ -20,7 +20,6 @@ public class MenuController_MVC implements ActionListener
         if (src == menuView.getStartButton()) 
         {
             System.out.println("Start Game clicked");
-            // TODO: open SetupGUI once it's ready
             SetupGUI_MVC setupGUI = new SetupGUI_MVC();
             new SetupController_MVC(setupGUI);
             setupGUI.setVisible(true);
@@ -30,6 +29,7 @@ public class MenuController_MVC implements ActionListener
         {
             System.out.println("Stats clicked");
             // TODO: open StatsGUI in future
+            new StatController_MVC().showStatsGUI();
         }
         else if (src == menuView.getExitButton()) 
         {

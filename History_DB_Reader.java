@@ -28,8 +28,11 @@ public class History_DB_Reader
     {
         LocalDateTime currentDate = LocalDateTime.now();
         
-        logHistory(player1.getName(), currentDate, turnsSurvived.get(player1), selfShot.get(player1), player1.getAlive());
-        logHistory(player2.getName(), currentDate, turnsSurvived.get(player2), selfShot.get(player2), player2.getAlive());
+        if(player1 != null && player2 != null)
+        {
+            logHistory(player1.getName(), currentDate, turnsSurvived.get(player1.getName()), selfShot.get(player1.getName()), player1.getAlive());
+            logHistory(player2.getName(), currentDate, turnsSurvived.get(player2.getName()), selfShot.get(player2.getName()), player2.getAlive());
+        }
     }
     
     
@@ -50,6 +53,42 @@ public class History_DB_Reader
             System.out.println("Something went wrong with the LogHistory, check it out"); 
         }
         
+    }
+    
+    public StringBuilder readFullHistoryDB() 
+    {
+        StringBuilder sb = new StringBuilder();
+        String query = "SELECT * FROM HistoricalTable ORDER BY gameDate DESC"; // newest first
+
+        try (Statement smt = db.getConnection().createStatement();
+             ResultSet rs = db.getConnection().prepareStatement(query).executeQuery()) 
+        {
+            sb.append("=== Full Game History ===\n");
+
+            while (rs.next()) 
+            {
+                String playerName = rs.getString("PlayerName");
+                Timestamp gameDate = rs.getTimestamp("gameDate");
+                int selfShotCount = rs.getInt("SelfShot");
+                int turns = rs.getInt("TurnsSurvived");
+                boolean status = rs.getBoolean("Status");
+
+                sb.append("Player: ").append(playerName).append("\n");
+                sb.append("Game Date: ").append(gameDate.toLocalDateTime()).append("\n");
+                sb.append("Self Shot: ").append(selfShotCount).append("\n");
+                sb.append("Turns Survived: ").append(turns).append("\n");
+                sb.append("Alive: ").append(status ? "Yes" : "No").append("\n");
+                sb.append("-------------------------\n");
+            }
+
+        } 
+        catch (SQLException e) 
+        {
+            sb.append("Failed to read from HistoricalTable.\n");
+            e.printStackTrace();
+        }
+
+        return sb;
     }
     
     

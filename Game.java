@@ -14,8 +14,8 @@ public class Game
     DataBaseConn db = DataBaseConn.getInstance();
     Connection conn = db.getConnection();
     
-    private StatTracker stats;
-    private Action_Handler actionhandler;
+    public StatTracker stats;
+    public Action_Handler actionhandler;
     
     
     public Game(Logger log)
@@ -33,6 +33,7 @@ public class Game
         this.loadedGun = gun;
         // now that we have a gun, we can safely initialize dependent objects
         this.stats = new StatTracker(logger, players, loadedGun, db);
+        this.stats.setupStats();
         this.actionhandler = new Action_Handler(loadedGun, stats);
     }
     
@@ -46,9 +47,8 @@ public class Game
         if (stats != null) 
         {
             stats.initDB();
-            stats.PrintStats(); // just logs
-            stats.PrintPreviousGame(); //logs and read
-            stats.printPreviousPlayer(); //logs and read
+            //stats.PrintStats(); // just logs
+            //stats.PrintPreviousGame(); //logs and read
         }
     
     }

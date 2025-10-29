@@ -5,16 +5,14 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+public final class DataBaseConn {
 
-public final class  DataBaseConn
-{
     private static final String URL = "jdbc:derby:RussianRDB;create=true";  //url of the DB host
 
     private static DataBaseConn instance; // single instance
-    public Connection conn; // shared connection
+    private Connection conn; // shared connection
 
-    public DataBaseConn() 
-    {
+    public DataBaseConn() {
         try 
         {
             conn = DriverManager.getConnection(URL);
@@ -23,17 +21,15 @@ public final class  DataBaseConn
             createHistoryTable();
             createRecentGameTable();
         } 
-        catch (SQLException ex) 
-        {
-            System.out.println("Did not setup right DB");
+        catch (SQLException ex) {
+            System.out.println("DB setup error: " + ex.getMessage() + " / SQLState: " + ex.getSQLState());
         }
-        
+
     }
-    
+
     public static synchronized DataBaseConn getInstance() 
     {
-        if (instance == null) 
-        {
+        if (instance == null) {
             instance = new DataBaseConn();
         }
         return instance;
@@ -43,26 +39,25 @@ public final class  DataBaseConn
     {
         return this.conn;
     }
-    
-    
+
     ///////////////
     public void createMemorialTable() // Creates a table that logs new players, does not update existing player or will add old players
     {
-        try(Statement smt = conn.createStatement())
+        try (Statement smt = conn.createStatement()) 
         {
             smt.executeUpdate("CREATE TABLE MemorialTable (PlayerName VARCHAR(50) PRIMARY KEY)");
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Something wrong with the memorial table");
+        } 
+        catch (SQLException e) {
+            if (!"X0Y32".equals(e.getSQLState())) {
+                System.out.println("Error creating MemorialTable: " + e.getMessage());
+            }
         }
     }
-    
-    //////////////////
 
-    public void createHistoryTable()
+    //////////////////
+    public void createHistoryTable() 
     {
-        try(Statement smt = conn.createStatement())
+        try (Statement smt = conn.createStatement()) 
         {
             smt.executeUpdate("""
                 CREATE TABLE HistoricalTable (
@@ -73,19 +68,19 @@ public final class  DataBaseConn
                               Status BOOLEAN
                                             )
                               """);
+        } 
+        catch (SQLException e) {
+            if (!"X0Y32".equals(e.getSQLState())) {
+                System.out.println("Error creating MemorialTable: " + e.getMessage());
+            }
         }
-        catch(SQLException e)
-        {
-            System.out.println("Something wrong with the Historical Table");
-        }
-        
+
     }
-    
+
     ///////////
-    
-    public void createRecentGameTable()
+    public void createRecentGameTable() 
     {
-        try(Statement smt = conn.createStatement())
+        try (Statement smt = conn.createStatement()) 
         {
             smt.executeUpdate("""
                 CREATE TABLE RecentGameTable (
@@ -94,18 +89,16 @@ public final class  DataBaseConn
                               Status BOOLEAN
                                             )
                               """);
-        }
-        catch(SQLException e)
+        } 
+        catch (SQLException e) 
         {
-            System.out.println("Something wrong with the RecentGameTable");
+            if (!"X0Y32".equals(e.getSQLState())) {
+                System.out.println("Error creating MemorialTable: " + e.getMessage());
+            }
         }
     }
-    
-    
-    
-    
+
     ///////////
-    
     /*
     public void closeConnections() 
     {
@@ -121,5 +114,4 @@ public final class  DataBaseConn
             }
         }
     }*/
-
 }

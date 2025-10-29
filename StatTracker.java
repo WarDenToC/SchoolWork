@@ -68,23 +68,17 @@ public class StatTracker
         History_DB_Reader HDB = new History_DB_Reader(db, players.get(0), players.get(1), turnsSurvived, selfShot);
         HDB.StoreHistoryDB();
         
-        //db.logHistory(name1, currentDate, selfShot.get(players.get(0)), turnsSurvived.get(players.get(0)), P1_status);
-        //db.logHistory(name1, currentDate, selfShot.get(players.get(1)), turnsSurvived.get(players.get(1)), P2_status);
-        
         //Logging to RecentGame
         RecentGame_DB_RW RGDB = new RecentGame_DB_RW(db, players.get(0), players.get(1));
         RGDB.storeRecentGameDB();
-        //db.logRecentGame(players.get(0).getName(), currentDate, players.get(0).getAlive());
-        //db.logRecentGame(players.get(1).getName(), currentDate, players.get(1).getAlive());
         
         //Loggin to memorial
         Player_DB_RW PDB = new Player_DB_RW(db, name1, name2);
         PDB.storePlayersDB();
-        //db.addNewPlayers(players.get(0).getName());
-        //db.addNewPlayers(players.get(1).getName());
     }
     
     
+    /*
     public void PrintStats() 
     {
         LocalDateTime currentDate = LocalDateTime.now();
@@ -155,51 +149,6 @@ public class StatTracker
             sb.append("Loser: ").append(players.get(1).getName()).append("\n");
         }
         
-        System.out.println("Would you like to check the previous game match? (Y/N)");
-        String input = scanner.nextLine();
-        
-        while(!input.equalsIgnoreCase("N") && !input.equalsIgnoreCase("Y"))
-        {
-            System.out.println("Please enter the given options(Y/N)");
-            input = scanner.nextLine();
-        }
-        
-        if(input.equalsIgnoreCase("Y")) // if they say yes then we will read the previous game stats and print it to the console thenn we will overwrite that file 
-        {
-            if(statLogger != null) 
-            {
-                reader.readPreviousGame();
-                statLogger.LogRecentGame(sb.toString()); //pass the whole string ot the logger after reading the previous game before updating it 
-            }   
-        }
-        else
-        {
-            if(statLogger != null) 
-            {
-                statLogger.LogRecentGame(sb.toString());
-            }
-        }
-    }
-    
-    public void printPreviousPlayer() //reads all the players that have played this game 
-    {
-        System.out.println("Would you like to check the players that have played this game?(Y/N)");
-        String input = scanner.nextLine();
-        
-        while(!input.equalsIgnoreCase("N") && !input.equalsIgnoreCase("Y"))
-        {
-            System.out.println("Please enter the given options(Y/N)");
-            input = scanner.nextLine();
-        }
-        
-        if(input.equalsIgnoreCase("Y"))
-        {
-            reader.readParticipatedPlayer(players, true);
-        }
-        else
-        {
-            reader.readParticipatedPlayer(players, false);   
-        }       
-    }
+    }*/
     
 }

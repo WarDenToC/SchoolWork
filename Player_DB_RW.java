@@ -11,7 +11,6 @@ public class Player_DB_RW
 {
     String nameOfP1;
     String nameOfP2;
-    ArrayList<String> nameList = new ArrayList<>();
     DataBaseConn db;
     
     
@@ -48,6 +47,7 @@ public class Player_DB_RW
     
     public List<String> getAllPlayers()
     {
+        ArrayList<String> nameList = new ArrayList<>();
         String retrieveQuery = "Select PlayerName FROM MemorialTable";
         try(ResultSet rs = db.getConnection().prepareStatement(retrieveQuery).executeQuery())
         {

@@ -56,13 +56,14 @@ public class GameController_MVC implements ActionListener
         
         String result = game.getActionHandler().handle_action(current, other, currentPlayerChoice);
         gameView.setRevolverStatus(result);
-        
-        if(!current.getAlive() || !other.getAlive()) {
-    Player loser = !current.getAlive() ? current : other;
-    Player winner = current == loser ? other : current;
-    endGame(loser, winner);
-    return;
-}
+
+        if (!current.getAlive() || !other.getAlive()) 
+        {
+            Player loser = !current.getAlive() ? current : other;
+            Player winner = current == loser ? other : current;
+            endGame(loser, winner);
+            return;
+        }
         
         game.turn.getNextPlayer();
         updateTurnDisplay();
@@ -70,8 +71,9 @@ public class GameController_MVC implements ActionListener
     
     private void endGame(Player loser, Player winner) 
     {
-        //game.endGame();
-        JOptionPane.showMessageDialog(
+        game.endGame();
+        JOptionPane.showMessageDialog
+        (
                 gameView,
                 "Game Over!\nWinner: " + (winner.getAlive() ? winner.getName() : "None")
                 + "\nLoser: " + loser.getName(),
