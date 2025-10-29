@@ -1,9 +1,0 @@
-=======Endgame=======
-Date: 01-09-2025 16:15:15
-=======Players=======
-Player 1: Graham
-Player 2: Joshua
-=======Outcome=======
-Winner: Graham
-Loser: Joshua
-
